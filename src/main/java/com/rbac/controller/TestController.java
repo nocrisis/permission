@@ -1,11 +1,17 @@
 package com.rbac.controller;
 
 import com.rbac.common.JsonData;
+import com.rbac.common.exception.ParamException;
 import com.rbac.common.exception.PermissionException;
+import com.rbac.param.ValidateTestVO;
+import com.rbac.util.BeanValidator;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.MapUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.Map;
 
 @Controller
 @RequestMapping("/test")
@@ -16,8 +22,26 @@ public class TestController
     @ResponseBody
     public JsonData hello() {
         log.info("hello");
-        throw new RuntimeException("text Exception");
-//        throw new PermissionException("text Exception");
+//        throw new RuntimeException("text Exception");
+        throw new PermissionException("text Exception");
 //        return JsonData.success("hello.permission");
+    }
+
+    @RequestMapping("/validate.json")
+    @ResponseBody
+    public JsonData validate(ValidateTestVO testVO) throws ParamException {
+        log.info("validate test");
+/*        try {
+            Map<String, String> map = BeanValidator.validateObject(testVO);
+            if (MapUtils.isNotEmpty(map)) {
+                for (Map.Entry<String, String> entry : map.entrySet()) {
+                    log.info("{}->{}", entry.getKey(), entry.getValue());
+                }
+            }
+        } catch (Exception e) {
+            log.error(e.toString());
+        }*/
+        BeanValidator.check(testVO);
+        return JsonData.success("test Validate");
     }
 }
