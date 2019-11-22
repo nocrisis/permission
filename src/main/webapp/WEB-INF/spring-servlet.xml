@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <!--激活那些已经在spring容器里注册过的bean上面的注解，也就是显示的向Spring注册
+AutowiredAnnotationBeanPostProcessor：@Autowired
+CommonAnnotationBeanPostProcessor：@ Resource 、@ PostConstruct、@ PreDestroy
+PersistenceAnnotationBeanPostProcessor：@PersistenceContext
+RequiredAnnotationBeanPostProcessor：@Required
+仅能够在已经在spring注册过的bean上面起作用。对于没有在spring容器中注册的bean，它并不能执行任何操作。
+-->
+   <!-- <context:annotation-config/>--><!--由于有context:component-scan,所以实际上被忽略-->
+    <!--启动注解驱动的mvc功能  会自动注册DefaultAnnotationHandlerMapping与AnnotationMethodHandlerAdapter 两个bean,是spring MVC为@Controllers分发请求所必须的。
+并提供了：数据绑定支持，@NumberFormatannotation支持，@DateTimeFormat支持，@Valid支持，读写XML的支持（JAXB），读写JSON的支持（Jackson）-->
+
+    <mvc:annotation-driven>
+        <mvc:message-converters register-defaults="true">
+            <!-- 配置Fastjson支持 -->
+            <bean class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+                <property name="supportedMediaTypes">
+                    <list>
+                        <value>text/html;charset=UTF-8</value>
+                        <value>application/json</value>
+                    </list>
+                </property>
+                <!--<property name="features">
+                    <list>
+                        <value>WriteMapNullValue</value>
+                        <value>QuoteFieldNames</value>
+                    </list>
+                </property>-->
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+
+    <!--启动包扫描功能 除了具有上面的功能之外，还具有自动将带有@component,@service,@Repository等注解的对象注册到spring容器中的功能。-->
+    <context:component-scan base-package="com.rbac.controller"/>
+    <context:component-scan base-package="com.rbac.service"/>
+    <!--指明@RequestMapping 路径对应的接口-->
+    <!--<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"/>-->
+    <!--指明接口返回的格式如json，html,pdf进行视图渲染-->
+    <bean class="org.springframework.web.servlet.view.BeanNameViewResolver"/>
+    <!--全局异常处理类-->
+    <bean class="com.rbac.common.SpringExceptionResolver"/>
+    <!--Data返回处理类-->
+    <!--<bean id="jsonView" class="org.springframework.web.servlet.view.json.MappingJackson2JsonView"/>-->
+    <bean id="jsonView" class="com.alibaba.fastjson.support.spring.FastJsonJsonView"/>
+
+    <!--jsp返回处理类-->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/views/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+</beans>
