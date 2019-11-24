@@ -35,10 +35,13 @@ RequiredAnnotationBeanPostProcessor：@Required
             </bean>
         </mvc:message-converters>
     </mvc:annotation-driven>
-
+<mvc:interceptors>
+    <bean class="com.rbac.common.HttpInterceptor" />
+</mvc:interceptors>
     <!--启动包扫描功能 除了具有上面的功能之外，还具有自动将带有@component,@service,@Repository等注解的对象注册到spring容器中的功能。-->
     <context:component-scan base-package="com.rbac.controller"/>
     <context:component-scan base-package="com.rbac.service"/>
+    <bean class="com.rbac.common.ApplicationContextHelper" lazy-init="false"/>
     <!--指明@RequestMapping 路径对应的接口-->
     <!--<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"/>-->
     <!--指明接口返回的格式如json，html,pdf进行视图渲染-->

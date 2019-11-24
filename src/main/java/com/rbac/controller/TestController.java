@@ -1,8 +1,12 @@
 package com.rbac.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.rbac.common.ApplicationContextHelper;
 import com.rbac.common.JsonData;
 import com.rbac.common.exception.ParamException;
 import com.rbac.common.exception.PermissionException;
+import com.rbac.dao.SysAclModuleMapper;
+import com.rbac.model.SysAclModule;
 import com.rbac.param.ValidateTestVO;
 import com.rbac.util.BeanValidator;
 import lombok.extern.slf4j.Slf4j;
@@ -43,5 +47,14 @@ public class TestController
         }*/
         BeanValidator.check(testVO);
         return JsonData.success("test Validate");
+    }
+    @RequestMapping("/appcontext.json")
+    @ResponseBody
+    public JsonData popByApp() throws ParamException {
+        log.info("popByApp test");
+        SysAclModuleMapper moduleMapper = ApplicationContextHelper.popBean(SysAclModuleMapper.class);
+        SysAclModule module = moduleMapper.selectByPrimaryKey(1);
+        log.info(JSON.toJSONString(module));
+        return JsonData.success("test ApplicationContextHelper");
     }
 }

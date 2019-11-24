@@ -29,6 +29,11 @@ public class JsonData {
         jsonData.data = object;
         return jsonData;
     }
+    public static JsonData success() {
+        JsonData jsonData = new JsonData(true);
+        jsonData.data = "成功";
+        return jsonData;
+    }
 
     public static JsonData fail(String msg) {
         JsonData jsonData = new JsonData(false);

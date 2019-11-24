@@ -15,7 +15,7 @@ public class ValidateTestVO {
     private String msg;
     @NotNull
     private Integer id;
-    @NotEmpty
+//    @NotEmpty
     private List<String> nameList;
 
 }
