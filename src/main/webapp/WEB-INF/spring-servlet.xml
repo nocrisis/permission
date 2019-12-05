@@ -12,7 +12,7 @@ PersistenceAnnotationBeanPostProcessor：@PersistenceContext
 RequiredAnnotationBeanPostProcessor：@Required
 仅能够在已经在spring注册过的bean上面起作用。对于没有在spring容器中注册的bean，它并不能执行任何操作。
 -->
-   <!-- <context:annotation-config/>--><!--由于有context:component-scan,所以实际上被忽略-->
+    <!-- <context:annotation-config/>--><!--由于有context:component-scan,所以实际上被忽略-->
     <!--启动注解驱动的mvc功能  会自动注册DefaultAnnotationHandlerMapping与AnnotationMethodHandlerAdapter 两个bean,是spring MVC为@Controllers分发请求所必须的。
 并提供了：数据绑定支持，@NumberFormatannotation支持，@DateTimeFormat支持，@Valid支持，读写XML的支持（JAXB），读写JSON的支持（Jackson）-->
 
@@ -35,9 +35,9 @@ RequiredAnnotationBeanPostProcessor：@Required
             </bean>
         </mvc:message-converters>
     </mvc:annotation-driven>
-<mvc:interceptors>
-    <bean class="com.rbac.common.HttpInterceptor" />
-</mvc:interceptors>
+    <mvc:interceptors>
+        <bean class="com.rbac.common.HttpInterceptor"/>
+    </mvc:interceptors>
     <!--启动包扫描功能 除了具有上面的功能之外，还具有自动将带有@component,@service,@Repository等注解的对象注册到spring容器中的功能。-->
     <context:component-scan base-package="com.rbac.controller"/>
     <context:component-scan base-package="com.rbac.service"/>
@@ -52,9 +52,41 @@ RequiredAnnotationBeanPostProcessor：@Required
     <!--<bean id="jsonView" class="org.springframework.web.servlet.view.json.MappingJackson2JsonView"/>-->
     <bean id="jsonView" class="com.alibaba.fastjson.support.spring.FastJsonJsonView"/>
 
-    <!--jsp返回处理类-->
-    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <property name="prefix" value="/views/"/>
-        <property name="suffix" value=".jsp"/>
+    <!--    &lt;!&ndash;jsp返回处理类&ndash;&gt;
+        <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+            <property name="prefix" value="/views/"/>
+            <property name="suffix" value=".jsp"/>
+            <property name="order" value="2"/>
+        </bean>-->
+
+    <!-- 配置Freemarker屬性文件路徑 -->
+    <bean id="freemarkerConfiguration" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="location" value="classpath:/freemarker.properties"/>
+    </bean>
+    <!-- 配置freeMarker模板加載地址 -->
+    <bean class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+        <!-- 視圖解析器會在/WEB-INF/views/路徑下掃描視圖文件 -->
+        <property name="templateLoaderPath" value="/WEB-INF/views/"/>
+        <property name="freemarkerVariables">
+            <map>
+                <entry key="xml_escape" value-ref="fmXmlEscape"/>
+            </map>
+        </property>
+        <!--加载freemarker属性  -->
+        <property name="freemarkerSettings" ref="freemarkerConfiguration"/>
+    </bean>
+    <bean id="fmXmlEscape" class="freemarker.template.utility.XmlEscape"/>
+    <!-- 配置freeMarker視圖解析器 -->
+    <bean class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.freemarker.FreeMarkerView"/>
+        <!--<property name="prefix" value="/views/"/>-->
+        <property name="suffix" value=".ftl"/>
+        <property name="contentType" value="text/html; charset=UTF-8"/>
+        <property name="exposeRequestAttributes" value="true"/>
+        <property name="exposeSessionAttributes" value="true"/>
+        <property name="exposeSpringMacroHelpers" value="true"/>
+        <property name="requestContextAttribute" value="request"/>
+        <!-- 給視圖解析器配置優先級，你可以給之前jsp視圖解析器的值配為2 -->
+        <property name="order" value="1"/>
     </bean>
 </beans>

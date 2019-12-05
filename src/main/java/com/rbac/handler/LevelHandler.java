@@ -12,7 +12,7 @@ public class LevelHandler {
     //0.1.2
     //0.1.3
     //0.4
-    //即level是逐级拼接的
+    //即level是逐级拼接的，level是所有父级id的拼接，不包括自己
     public static String calculateLevel(String parentLevel, int parentId) {
         if (StringUtils.isBlank(parentLevel)) {
             return ROOT;

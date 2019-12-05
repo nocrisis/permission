@@ -101,4 +101,43 @@ public class SysDept {
     public void setOperatorIp(String operatorIp) {
         this.operatorIp = operatorIp == null ? null : operatorIp.trim();
     }
+    /*Lombok就是一个实现了"JSR 269 API"的程序（只要程序实现了该API，就能在javac运行的时候得到调用）。在使用javac的过程中，它产生作用的具体流程如下：
+    1.Javac对源代码进行分析，生成一棵抽象语法树(AST)
+    2.Javac编译过程中调用实现了JSR 269的Lombok程序
+    3.此时Lombok就对第一步骤得到的AST进行处理，找到Lombok注解所在类对应的语法树(AST)，然后修改该语法树(AST)，增加Lombok注解定义的相应树节点
+    4.Javac使用修改后的抽象语法树(AST)生成字节码文件*/
+
+    /*
+    public static class PeopleBuilder {
+        private String name;
+        private String sex;
+        private int age;
+
+        PeopleBuilder() {
+        }
+
+        public People.PeopleBuilder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public People.PeopleBuilder sex(String sex) {
+            this.sex = sex;
+            return this;
+        }
+
+        public People.PeopleBuilder age(int age) {
+            this.age = age;
+            return this;
+        }
+
+        public People build() {
+            return new People(this.name, this.sex, this.age);
+        }
+
+        public String toString() {
+            return "People.PeopleBuilder(name=" + this.name + ", sex=" + this.sex + ", age=" + this.age + ")";
+        }
+
+    }*/
 }
