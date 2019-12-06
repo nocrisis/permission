@@ -11,11 +11,12 @@ public interface SysUserMapper {
 
     int insert(SysUser record);
 
+    //javabean查询时不能对bean用@Param,param是针对单个字段，否则找不到对应字段
     int insertSelective(SysUser record);
 
     SysUser selectByPrimaryKey(@Param("id") Integer id);
 
-    List<SysUser> selectByModel(@Param("param") UserParam param);
+    List<SysUser> selectByModel(UserParam param);
 
     int updateByPrimaryKeySelective(SysUser record);
 

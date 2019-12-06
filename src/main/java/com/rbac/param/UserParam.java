@@ -1,19 +1,24 @@
 package com.rbac.param;
 
+import com.alibaba.fastjson.annotation.JSONField;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+import javax.validation.constraints.NotBlank;
+
+@Getter
+@Setter
+@ToString
 public class UserParam {
     private Integer userId;
-    private String email;
+    @JSONField(name = "name")
+    private String username;
+    private String telephone;
+    @JSONField(name = "email")
+    @NotBlank
+    private String mail;
+    @NotBlank
     private String password;
 
-    public void setUserId(Integer userId) { this.userId = userId; }
-
-    public Integer getUserId() { return userId; }
-
-    public String getEmail() { return email; }
-
-    public void setEmail(String email) { this.email = email; }
-
-    public String getPassword() { return password; }
-
-    public void setPassword(String password) { this.password = password; }
 }
