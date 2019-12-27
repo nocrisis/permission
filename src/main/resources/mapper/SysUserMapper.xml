@@ -25,6 +25,14 @@
     from sys_user
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <select id="selectByPhoneOrMail" resultMap="BaseResultMap" parameterType="com.rbac.param.UserParam" >
+    select
+    <include refid="Base_Column_List" />
+    from sys_user
+    where
+    telephone = #{username,jdbcType=VARCHAR}
+    or mail = #{username,jdbcType=VARCHAR}
+  </select>
   <select id="selectByModel" resultMap="BaseResultMap" parameterType="com.rbac.param.UserParam" >
     select
     <include refid="Base_Column_List" />

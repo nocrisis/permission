@@ -9,6 +9,7 @@ import com.rbac.handler.LevelHandler;
 import com.rbac.model.SysDept;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
+
 import javax.annotation.Resource;
 import java.util.Collections;
 import java.util.Comparator;
@@ -23,7 +24,7 @@ public class SysTreeService {
         List<SysDept> deptList = deptMapper.getAllDept();
         List<DeptLevelDTO> deptLevelList = Lists.newArrayList();
         for (SysDept dept : deptList) {
-            //copyProperties dto<-dept
+            //sysDept转为DeptLevelDTO copyProperties dto<-dept
             DeptLevelDTO dto = DeptLevelDTO.adapt(dept);
             deptLevelList.add(dto);
         }
@@ -77,7 +78,17 @@ public class SysTreeService {
     public Comparator<DeptLevelDTO> deptSeqComparator = new Comparator<DeptLevelDTO>() {
         @Override
         public int compare(DeptLevelDTO o1, DeptLevelDTO o2) {
-            return o1.getSeq() - o2.getSeq();
+            /*//o1,o2
+            if (o1.getSeq() > o2.getSeq()) {
+                return 1;
+            } else if (o1.getSeq() < o2.getSeq()) {
+                return -1;
+            } else if (o1.getId() >= o2.getId()) {
+                return 1;
+            } else {
+                return -1;
+            }*/
+            return o1.getSeq()-o2.getSeq();//当该方法返回正数时，以第一个参数大于第二个，反之亦然
         }
     };
 }

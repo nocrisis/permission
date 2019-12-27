@@ -1,21 +1,16 @@
 package com.rbac.model;
 
-import com.alibaba.fastjson.annotation.JSONField;
-
-import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
 public class SysUser {
     private Integer id;
-    @NotBlank
-    @JSONField(name = "name")
+
     private String username;
 
     private String telephone;
-    @NotBlank
-    @JSONField(name = "email")
+
     private String mail;
-    @NotBlank
+
     private String password;
 
     private String avatar;

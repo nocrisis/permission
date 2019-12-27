@@ -4,6 +4,7 @@ import com.rbac.dao.SysUserMapper;
 import com.rbac.model.SysUser;
 import com.rbac.param.UserParam;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -21,6 +22,8 @@ public class SysUserService {
         if (userId != null) {
             SysUser user = sysUserMapper.selectByPrimaryKey(userId);
             users.add(user);
+        } else if (StringUtils.isBlank(param.getTelephone()) && StringUtils.isBlank(param.getMail())) {
+            users = sysUserMapper.selectByPhoneOrMail(param);
         } else {
             users = sysUserMapper.selectByModel(param);
         }
@@ -32,4 +35,5 @@ public class SysUserService {
         int res = sysUserMapper.insertSelective(user);
         return res == 1;
     }
+
 }

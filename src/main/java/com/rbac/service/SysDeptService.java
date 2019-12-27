@@ -22,6 +22,9 @@ public class SysDeptService {
 
     public void save(DeptParam param) {
         BeanValidator.check(param);
+        if (param.getParentId() == null) {
+            param.setParentId(0);
+        }
         if (checkExits(param.getParentId(), param.getName(), param.getId())) {
             throw new ParamException("同一层级下存在相同名称的部门");
         }
@@ -89,4 +92,13 @@ public class SysDeptService {
         }
         return dept.getLevel();//部门level
     }
+
+    public String getDeptNameById(Integer deptId) {
+        SysDept dept = sysDeptMapper.selectByPrimaryKey(deptId);
+        if (dept == null) {
+            return null;
+        }
+        return dept.getName();
+    }
+
 }

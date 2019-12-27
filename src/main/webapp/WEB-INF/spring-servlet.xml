@@ -47,7 +47,8 @@ RequiredAnnotationBeanPostProcessor：@Required
     <!--指明接口返回的格式如json，html,pdf进行视图渲染-->
     <bean class="org.springframework.web.servlet.view.BeanNameViewResolver"/>
     <!--全局异常处理类-->
-    <bean class="com.rbac.common.SpringExceptionResolver"/>
+    <!--<bean class="com.rbac.common.SpringExceptionResolver"/>-->
+    <bean class="com.rbac.common.GlobalExceptionResolver"/>
     <!--Data返回处理类-->
     <!--<bean id="jsonView" class="org.springframework.web.servlet.view.json.MappingJackson2JsonView"/>-->
     <bean id="jsonView" class="com.alibaba.fastjson.support.spring.FastJsonJsonView"/>

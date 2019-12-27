@@ -18,7 +18,11 @@ public interface SysUserMapper {
 
     List<SysUser> selectByModel(UserParam param);
 
+    List<SysUser> selectByPhoneOrMail(UserParam param);
+
     int updateByPrimaryKeySelective(SysUser record);
 
     int updateByPrimaryKey(SysUser record);
+
+
 }

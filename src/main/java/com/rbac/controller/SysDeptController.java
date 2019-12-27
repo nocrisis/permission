@@ -8,8 +8,7 @@ import com.rbac.service.SysTreeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -30,7 +29,7 @@ public class SysDeptController {
     }
     @RequestMapping("/save.json")
     @ResponseBody
-    public JsonData saveDept(DeptParam param) {
+    public JsonData saveDept(@RequestBody DeptParam param) {
         deptService.save(param);
         return JsonData.success();
     }
@@ -42,8 +41,17 @@ public class SysDeptController {
     }
     @RequestMapping("/update.json")
     @ResponseBody
-    public JsonData updateDept(DeptParam param) {
+    public JsonData updateDept(@RequestBody DeptParam param) {
         deptService.update(param);
         return JsonData.success();
     }
+
+    @DeleteMapping
+    @ResponseBody
+    public JsonData deleteDept(@PathVariable("id") int id){
+        log.info("delete dept id {}",id);
+        //todo
+        return JsonData.success();
+    }
+
 }

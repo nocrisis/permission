@@ -24,7 +24,7 @@ public interface SysDeptMapper {
 
     void batchUpdateLevel(@Param("SysDeptList") List<SysDept> deptList);
 
-//--排除自己本身的存在外是否有重复
-    int countByNameAndParentId(@Param("parentId") int parentId, @Param("name") String name, @Param("id") Integer id);
+//--排除自己本身的存在外是否有重复,这里id不能为int,@Param会爆空指针
+    int countByNameAndParentId(@Param("parentId") Integer parentId, @Param("name") String name, @Param("id") Integer id);
 
 }

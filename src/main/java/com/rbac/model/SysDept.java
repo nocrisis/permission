@@ -16,7 +16,7 @@ public class SysDept {
 
     private String name;
 
-    private Integer parentId;
+    private Integer parentId = 0;
 
     private String level;
 
@@ -46,13 +46,9 @@ public class SysDept {
         this.name = name == null ? null : name.trim();
     }
 
-    public Integer getParentId() {
-        return parentId;
-    }
+    public Integer getParentId() { return parentId; }
 
-    public void setParentId(Integer parentId) {
-        this.parentId = parentId;
-    }
+    public void setParentId(Integer parentId) { this.parentId = parentId; }
 
     public String getLevel() {
         return level;

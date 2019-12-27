@@ -23,13 +23,15 @@ public class JWTUtil {
      * @param username 用户名
      * @return 加密的token
      */
-    public static String createToken(String username) {
+    public static String createToken(int id, String username,String deptName) {
         try {
             Date date = new Date(System.currentTimeMillis() + EXPIRE_TIME);
             Algorithm algorithm = Algorithm.HMAC256(SECRET);
             // 附带username信息
             return JWT.create()
-                    .withClaim("username", username)
+                    .withClaim("userId", id)
+                    .withClaim("name", username)
+                    .withClaim("deptName", deptName)
                     //到期时间
                     .withExpiresAt(date)
                     //创建一个新的JWT，并使用给定的算法进行标记
