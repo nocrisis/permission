@@ -1,6 +1,5 @@
 package com.rbac.param;
 
-import com.rbac.common.ValidateGroup;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -12,7 +11,7 @@ import javax.validation.constraints.NotBlank;
 @Setter
 @ToString
 public class DeptParam {
-    @NotBlank(message = "修改部门id不能为空",groups = {ValidateGroup.Update.class})
+    @NotBlank(message = "修改部门id不能为空",groups = {Update.class})
     private Integer id;
     @NotBlank(message = "部门名称不可以为空")
     @Length(max = 15, min = 2, message = "部门名称在2-15个字之间")
