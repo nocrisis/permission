@@ -1,6 +1,7 @@
 package com.rbac.dao;
 
 import com.rbac.model.SysUser;
+import com.rbac.param.ListUserParam;
 import com.rbac.param.UserParam;
 import org.apache.ibatis.annotations.Param;
 
@@ -19,6 +20,10 @@ public interface SysUserMapper {
     List<SysUser> selectByModel(UserParam param);
 
     List<SysUser> selectByPhoneOrMail(UserParam param);
+
+    List<SysUser> listUsersByDeptId(@Param("param") ListUserParam param);
+
+    int countUsersByDeptId(@Param("deptId") Integer deptId);
 
     int updateByPrimaryKeySelective(SysUser record);
 

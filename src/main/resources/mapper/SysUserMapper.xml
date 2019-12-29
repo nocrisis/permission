@@ -25,7 +25,19 @@
     from sys_user
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <select id="selectByPhoneOrMail" resultMap="BaseResultMap" parameterType="com.rbac.param.UserParam" >
+  <select id="listUsersByDeptId" resultMap="BaseResultMap" parameterType="com.rbac.param.ListUserParam" >
+    select
+    <include refid="Base_Column_List" />
+    from sys_user
+    where dept_id = #{param.deptId,jdbcType=INTEGER}
+    limit #{param.rowStart,jdbcType=INTEGER}, #{param.pageSize,jdbcType=INTEGER}
+  </select>
+  <select id="countUsersByDeptId" resultType="int" parameterType="com.rbac.param.ListUserParam" >
+    select count(*)
+    from sys_user
+    where dept_id = #{deptId}
+  </select>
+  <select id="selectByPhoneOrMail" resultMap="BaseResultMap" parameterType="integer" >
     select
     <include refid="Base_Column_List" />
     from sys_user

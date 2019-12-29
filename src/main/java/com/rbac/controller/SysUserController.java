@@ -2,8 +2,10 @@ package com.rbac.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.rbac.common.JsonData;
+import com.rbac.common.PageResult;
 import com.rbac.common.exception.ParamException;
 import com.rbac.model.SysUser;
+import com.rbac.param.ListUserParam;
 import com.rbac.param.Update;
 import com.rbac.param.UserParam;
 import com.rbac.service.SysDeptService;
@@ -52,7 +54,7 @@ public class SysUserController {
             //todo md5 pwd
             if (loginParam.getPassword().equals(sysUser.getPassword())) {
                 String dept = deptService.getDeptNameById(sysUser.getDeptId());
-                return JsonData.success(JWTUtil.createToken(sysUser.getId(), sysUser.getUsername(),dept));
+                return JsonData.success(JWTUtil.createToken(sysUser.getId(), sysUser.getUsername(), dept));
             } else {
                 return JsonData.fail("密码不正确");
             }
@@ -67,7 +69,7 @@ public class SysUserController {
         log.info("register:{}", payload);
         UserParam userParam = JSON.parseObject(payload, UserParam.class);
         userParam.setStatus(1);
-        Map<String, String> map = BeanValidator.validate(userParam, Update.class,Default.class);
+        Map<String, String> map = BeanValidator.validate(userParam, Update.class, Default.class);
         if (MapUtils.isNotEmpty(map)) {
             throw new ParamException(map.toString());
         }
@@ -85,6 +87,15 @@ public class SysUserController {
             return JsonData.fail("该邮箱或电话已经注册过");
         }
     }
+
     //todo code 401 token失效
+    @RequestMapping(value = "/list")
+    @ResponseBody
+    public JsonData list(@RequestBody String payload) {
+        log.info("user list:{}", payload);
+        ListUserParam listUserParam = JSON.parseObject(payload, ListUserParam.class);
+        PageResult<SysUser> sysUsers = userService.listUsers(listUserParam);
+        return JsonData.success(sysUsers);
+    }
 
 }
