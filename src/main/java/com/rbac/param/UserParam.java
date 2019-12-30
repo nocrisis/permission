@@ -15,15 +15,12 @@ import javax.validation.constraints.NotNull;
 @Setter
 @ToString
 public class UserParam {
-    private Integer userId;
-    @JSONField(name = "name")
+    private Integer id;
     @NotBlank(message = "用户名不可以为空",groups = Insert.class)
     @Length(min = 1, max = 20, message = "用户名长度需要在20个字以内")
     private String username;
     @NotBlank(message = "手机不可以为空",groups = Insert.class)
-    @JSONField(name = "phone")
     private String telephone;
-    @JSONField(name = "email")
     @NotBlank(message = "邮箱不可以为空",groups = Insert.class)
     private String mail;
     @NotBlank

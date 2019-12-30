@@ -29,5 +29,8 @@ public interface SysUserMapper {
 
     int updateByPrimaryKey(SysUser record);
 
+    int updateStatusByPrimaryKey(@Param("userId") Integer userId,@Param("status") Integer status);
 
+    int checkPhoneIsExited(@Param("telephone") String telephone);
+    int checkMailIsExited(@Param("mail") String mail);
 }

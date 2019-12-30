@@ -208,4 +208,19 @@
       operator_ip = #{operatorIp,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <update id="updateStatusByPrimaryKey" parameterType="integer">
+    update sys_user
+    set status = #{status}
+    where id = #{userId}
+  </update>
+  <select id="checkPhoneIsExited" resultType="int" parameterType="string">
+    select count(1)
+    from sys_user
+    where telephone = #{telephone}
+  </select>
+  <select id="checkMailIsExited" resultType="int" parameterType="string">
+    select count(1)
+    from sys_user
+    where mail = #{mail}
+  </select>
 </mapper>

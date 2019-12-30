@@ -5,8 +5,8 @@ import com.rbac.common.JsonData;
 import com.rbac.common.PageResult;
 import com.rbac.common.exception.ParamException;
 import com.rbac.model.SysUser;
+import com.rbac.param.Insert;
 import com.rbac.param.ListUserParam;
-import com.rbac.param.Update;
 import com.rbac.param.UserParam;
 import com.rbac.service.SysDeptService;
 import com.rbac.service.SysUserService;
@@ -18,10 +18,7 @@ import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.groups.Default;
 import java.util.List;
@@ -69,12 +66,12 @@ public class SysUserController {
         log.info("register:{}", payload);
         UserParam userParam = JSON.parseObject(payload, UserParam.class);
         userParam.setStatus(1);
-        Map<String, String> map = BeanValidator.validate(userParam, Update.class, Default.class);
+        Map<String, String> map = BeanValidator.validate(userParam, Insert.class, Default.class);
         if (MapUtils.isNotEmpty(map)) {
             throw new ParamException(map.toString());
         }
-        List<SysUser> users = userService.getUsers(userParam);
-        if (CollectionUtils.isEmpty(users)) {
+        boolean isExited = userService.checkNumberExits(userParam.getTelephone(), userParam.getMail());
+        if (!isExited) {
             SysUser insert = new SysUser();
             BeanUtils.copyProperties(userParam, insert);
             boolean res = userService.insert(insert);
@@ -96,6 +93,45 @@ public class SysUserController {
         ListUserParam listUserParam = JSON.parseObject(payload, ListUserParam.class);
         PageResult<SysUser> sysUsers = userService.listUsers(listUserParam);
         return JsonData.success(sysUsers);
+    }
+
+    @RequestMapping(value = "/edit/{userId}", method = RequestMethod.GET)
+    @ResponseBody
+    public JsonData get(@PathVariable("userId") Integer userId) {
+        if (userId == null) {
+            throw new ParamException("userId不能为空");
+        }
+        SysUser sysUser = userService.getUserByUserId(userId);
+        return JsonData.success(sysUser);
+    }
+
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    @ResponseBody
+    public JsonData get(@RequestBody String payload) {
+        log.info("user edit:{}", payload);
+        UserParam param = JSON.parseObject(payload, UserParam.class);
+        Map<String, String> map = BeanValidator.validate(param, Default.class);
+        if (MapUtils.isNotEmpty(map)) {
+            throw new ParamException(map.toString());
+        }
+        boolean res = userService.update(param);
+        if (res) {
+            return JsonData.success();
+        } else {
+            return JsonData.fail("更新失败");
+        }
+    }
+
+    @DeleteMapping(value = "/delete/{id}")
+    @ResponseBody
+    public JsonData delete(@PathVariable("id") int id) {
+        log.info("delete user id {}", id);
+        boolean res = userService.delete(id);
+        if (res) {
+            return JsonData.success();
+        } else {
+            return JsonData.fail("删除失败");
+        }
     }
 
 }

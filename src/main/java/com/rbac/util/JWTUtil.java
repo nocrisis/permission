@@ -30,7 +30,7 @@ public class JWTUtil {
             // 附带username信息
             return JWT.create()
                     .withClaim("userId", id)
-                    .withClaim("name", username)
+                    .withClaim("username", username)
                     .withClaim("deptName", deptName)
                     //到期时间
                     .withExpiresAt(date)
