@@ -1,6 +1,6 @@
 package com.rbac.param;
 
-import com.rbac.common.PageQuery;
+import com.rbac.common.bean.PageQuery;
 import lombok.Getter;
 import lombok.Setter;
 

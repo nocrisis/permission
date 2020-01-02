@@ -1,4 +1,4 @@
-package com.rbac.common;
+package com.rbac.common.interceptor;
 
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;

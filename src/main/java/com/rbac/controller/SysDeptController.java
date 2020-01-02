@@ -1,6 +1,6 @@
 package com.rbac.controller;
 
-import com.rbac.common.JsonData;
+import com.rbac.common.bean.JsonData;
 import com.rbac.dto.DeptLevelDTO;
 import com.rbac.param.DeptParam;
 import com.rbac.service.SysDeptService;

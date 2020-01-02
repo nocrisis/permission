@@ -1,4 +1,4 @@
-package com.rbac.common;
+package com.rbac.common.bean;
 
 import com.google.common.collect.Lists;
 import lombok.Builder;

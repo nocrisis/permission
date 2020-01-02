@@ -1,4 +1,4 @@
-package com.rbac.common;
+package com.rbac.common.bean;
 
 import lombok.Getter;
 import lombok.Setter;

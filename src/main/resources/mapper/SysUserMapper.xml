@@ -37,7 +37,7 @@
     from sys_user
     where dept_id = #{deptId}
   </select>
-  <select id="selectByPhoneOrMail" resultMap="BaseResultMap" parameterType="integer" >
+  <select id="selectByPhoneOrMail" resultMap="BaseResultMap" parameterType="string" >
     select
     <include refid="Base_Column_List" />
     from sys_user

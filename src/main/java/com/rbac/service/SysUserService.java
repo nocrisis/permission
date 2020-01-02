@@ -1,11 +1,10 @@
 package com.rbac.service;
 
-import com.rbac.common.PageResult;
+import com.rbac.common.bean.PageResult;
 import com.rbac.dao.SysUserMapper;
 import com.rbac.model.SysUser;
 import com.rbac.param.ListUserParam;
 import com.rbac.param.UserParam;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;

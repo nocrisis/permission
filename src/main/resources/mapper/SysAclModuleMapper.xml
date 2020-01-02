@@ -149,4 +149,15 @@
       operator_ip = #{operatorIp,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <select id="countByNameAndParentId" resultType="int">
+    select count(1)
+    from sys_acl_module
+    where name = #{name}
+    <if test="parentId!=null">
+      And parent_id = #{parentId}
+    </if>
+    <if test="id!=null">
+      And id!=#{id}
+    </if>
+  </select>
 </mapper>

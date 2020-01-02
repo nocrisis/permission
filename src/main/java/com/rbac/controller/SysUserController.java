@@ -1,8 +1,8 @@
 package com.rbac.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.rbac.common.JsonData;
-import com.rbac.common.PageResult;
+import com.rbac.common.bean.JsonData;
+import com.rbac.common.bean.PageResult;
 import com.rbac.common.exception.ParamException;
 import com.rbac.model.SysUser;
 import com.rbac.param.Insert;

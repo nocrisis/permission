@@ -1,5 +1,6 @@
 package com.rbac.common;
 
+import com.rbac.common.bean.JsonData;
 import com.rbac.common.exception.ParamException;
 import com.rbac.common.exception.PermissionException;
 import lombok.extern.slf4j.Slf4j;
