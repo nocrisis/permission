@@ -14,9 +14,9 @@ import java.util.Date;
 @Slf4j
 public class JWTUtil {
     // 过期时间 24 小时
-//    private static final long EXPIRE_TIME = 60 * 24 * 60 * 1000;
+    private static final long EXPIRE_TIME = 60 * 24 * 60 * 1000;
     //测试2分钟
-    private static final long EXPIRE_TIME = 2 * 60 * 1000;
+//    private static final long EXPIRE_TIME = 2 * 60 * 1000;
     // 密钥
     private static final String SECRET = "SHIRO+JWT";
     private static final String ISSUER = "Permission";

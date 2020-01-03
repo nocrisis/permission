@@ -1,6 +1,7 @@
 package com.rbac.common.interceptor;
 
 import com.alibaba.fastjson.JSON;
+import com.rbac.util.RequestHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -23,8 +24,6 @@ public class HttpInterceptor extends HandlerInterceptorAdapter {
 
     @Override//正常结束
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-        String url = request.getRequestURI();
-
     }
 
     @Override//过滤图片参数
@@ -36,4 +35,6 @@ public class HttpInterceptor extends HandlerInterceptorAdapter {
         request.setAttribute(START_TIME, start);
         return true;
     }
+
+
 }

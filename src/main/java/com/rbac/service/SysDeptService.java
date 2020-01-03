@@ -7,6 +7,8 @@ import com.rbac.handler.LevelHandler;
 import com.rbac.model.SysDept;
 import com.rbac.param.DeptParam;
 import com.rbac.util.BeanValidator;
+import com.rbac.util.IPUtil;
+import com.rbac.util.RequestHolder;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,8 +33,8 @@ public class SysDeptService {
         SysDept dept = SysDept.builder().name(param.getName()).parentId(param.getParentId())
                 .seq(param.getSeq()).memo(param.getMemo()).build();
         dept.setLevel(LevelHandler.calculateLevel(getLevel(param.getParentId()), param.getParentId()));
-        dept.setOperator("system");
-        dept.setOperatorIp("127.0.0.1");
+        dept.setOperator(RequestHolder.getCurrentUsername());
+        dept.setOperatorIp(IPUtil.getIpAddr(RequestHolder.getCurrentRequest()));
         dept.setOperatorTime(new Date());
         sysDeptMapper.insertSelective(dept);
     }
@@ -73,7 +75,6 @@ public class SysDeptService {
                     }
                 }
                 sysDeptMapper.batchUpdateLevel(deptList);
-
             }
         }
         sysDeptMapper.updateByPrimaryKey(after);

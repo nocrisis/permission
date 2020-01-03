@@ -12,6 +12,7 @@ import com.rbac.service.SysDeptService;
 import com.rbac.service.SysUserService;
 import com.rbac.util.BeanValidator;
 import com.rbac.util.JWTUtil;
+import com.rbac.util.RequestHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
@@ -47,7 +48,11 @@ public class SysUserController {
         }
         List<SysUser> users = userService.getUsers(loginParam);
         if (CollectionUtils.isNotEmpty(users)) {
+            if (users.size() > 1) {
+                log.error("相同账户{}存在{}个", loginParam.getUsername(), users.size());
+            }
             SysUser sysUser = users.get(0);
+            RequestHolder.add(sysUser);
             //todo md5 pwd
             if (loginParam.getPassword().equals(sysUser.getPassword())) {
                 String dept = deptService.getDeptNameById(sysUser.getDeptId());

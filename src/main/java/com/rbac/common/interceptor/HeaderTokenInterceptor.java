@@ -1,6 +1,7 @@
 package com.rbac.common.interceptor;
 
 import com.rbac.util.JWTUtil;
+import com.rbac.util.RequestHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -20,6 +21,8 @@ public class HeaderTokenInterceptor implements HandlerInterceptor {
             try {
                 boolean verify = JWTUtil.verify(headerToken);
                 if (verify) {
+                    RequestHolder.add(JWTUtil.getUsername(headerToken));
+                    RequestHolder.add(httpServletRequest);
                     return true;
                 }
                 httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -32,11 +35,15 @@ public class HeaderTokenInterceptor implements HandlerInterceptor {
 
     @Override
     public void postHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, ModelAndView modelAndView) throws Exception {
-
+        removeThreadLocalInfo();
     }
 
     @Override
     public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e) throws Exception {
+        removeThreadLocalInfo();
+    }
 
+    public void removeThreadLocalInfo() {
+        RequestHolder.remove(); ;
     }
 }
