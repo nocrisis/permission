@@ -3,10 +3,14 @@ package com.rbac.service;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
+import com.rbac.dao.SysAclModuleMapper;
 import com.rbac.dao.SysDeptMapper;
+import com.rbac.dto.AclModuleLevelDTO;
 import com.rbac.dto.DeptLevelDTO;
 import com.rbac.handler.LevelHandler;
+import com.rbac.model.SysAclModule;
 import com.rbac.model.SysDept;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
 
@@ -15,10 +19,13 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+@Slf4j
 @Service
 public class SysTreeService {
     @Resource
     private SysDeptMapper deptMapper;
+    @Resource
+    private SysAclModuleMapper aclModuleMapper;
 
     public List<DeptLevelDTO> deptTree() {
         List<SysDept> deptList = deptMapper.getAllDept();
@@ -88,7 +95,61 @@ public class SysTreeService {
             } else {
                 return -1;
             }*/
-            return o1.getSeq()-o2.getSeq();//当该方法返回正数时，以第一个参数大于第二个，反之亦然
+            return o1.getSeq() - o2.getSeq();//当该方法返回正数时，升序，否则逆序
+        }
+    };
+
+    public List<AclModuleLevelDTO> moduleTree() {
+        List<SysAclModule> aclModules = aclModuleMapper.getAllModule();
+        List<AclModuleLevelDTO> aclModuleLevelList = Lists.newArrayList();
+        for (SysAclModule aclModule : aclModules) {
+            AclModuleLevelDTO dto = AclModuleLevelDTO.adapt(aclModule);
+            aclModuleLevelList.add(dto);
+        }
+        return aclModuleListToTree(aclModuleLevelList);
+    }
+
+    public List<AclModuleLevelDTO> aclModuleListToTree(List<AclModuleLevelDTO> aclModuleLevelList) {
+        if (CollectionUtils.isEmpty(aclModuleLevelList)) {
+            return Lists.newArrayList();
+        }
+        //level->{module1,module2,...} Map<String,List<Object>> / Map<K, Collection<V>>
+//        Multimap可以包含有几个重复Key的value，可put进入多个不同value但是相同的key，但是又不是让后面覆盖前面的内容
+        Multimap<String, AclModuleLevelDTO> levelMultimap = ArrayListMultimap.create();
+        List<AclModuleLevelDTO> rootList = Lists.newArrayList();
+        for (AclModuleLevelDTO dto : aclModuleLevelList) {
+            //相同level的形成一个List
+            levelMultimap.put(dto.getLevel(), dto);
+            if (LevelHandler.ROOT.equals(dto.getLevel())) {
+                //加入最顶层没有父级的level为0的
+                rootList.add(dto);
+            }
+        }
+        //todo check desc
+        Collections.sort(rootList, moduleSeqComparator);
+        transformModuleTree(aclModuleLevelList, LevelHandler.ROOT, levelMultimap);
+        return rootList;
+    }
+
+
+    public void transformModuleTree(List<AclModuleLevelDTO> moduleLevelList, String level, Multimap<String, AclModuleLevelDTO> moduleLevelMultimap) {
+        for (int i = 0; i < moduleLevelList.size(); i++) {
+            AclModuleLevelDTO aclModuleLevelDTO = moduleLevelList.get(i);
+            String nextLevel = LevelHandler.calculateLevel(level, aclModuleLevelDTO.getId());
+            List<AclModuleLevelDTO> tempModuleList = (List<AclModuleLevelDTO>) moduleLevelMultimap.get(nextLevel);
+            if (CollectionUtils.isNotEmpty(tempModuleList)) {
+                Collections.sort(tempModuleList, moduleSeqComparator);
+                aclModuleLevelDTO.setAclModuleList(tempModuleList);
+                transformModuleTree(tempModuleList, nextLevel, moduleLevelMultimap);
+            }//如果子levelList为空，即没有这个key的level,就不用再setSubList,该dto递归结束
+        }
+    }
+
+
+    public Comparator<AclModuleLevelDTO> moduleSeqComparator = new Comparator<AclModuleLevelDTO>() {
+        @Override
+        public int compare(AclModuleLevelDTO o1, AclModuleLevelDTO o2) {
+            return o1.getSeq() - o2.getSeq();
         }
     };
 }

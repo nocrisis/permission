@@ -52,7 +52,6 @@ public class SysUserController {
                 log.error("相同账户{}存在{}个", loginParam.getUsername(), users.size());
             }
             SysUser sysUser = users.get(0);
-            RequestHolder.add(sysUser);
             //todo md5 pwd
             if (loginParam.getPassword().equals(sysUser.getPassword())) {
                 String dept = deptService.getDeptNameById(sysUser.getDeptId());
@@ -112,7 +111,7 @@ public class SysUserController {
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ResponseBody
-    public JsonData get(@RequestBody String payload) {
+    public JsonData update(@RequestBody String payload) {
         log.info("user edit:{}", payload);
         UserParam param = JSON.parseObject(payload, UserParam.class);
         Map<String, String> map = BeanValidator.validate(param, Default.class);

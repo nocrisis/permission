@@ -29,6 +29,11 @@
     delete from sys_acl
     where id = #{id,jdbcType=INTEGER}
   </delete>
+  <update id="updateStatusByPrimaryKey" parameterType="int">
+    update sys_acl
+    set status = #{status}
+    where id = #{id}
+  </update>
   <insert id="insert" parameterType="com.rbac.model.SysAcl" >
     insert into sys_acl (id, code, name, 
       acl_module_id, url, type, 
@@ -174,4 +179,24 @@
       operator_ip = #{operatorIp,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <select id="countByAclModuleId" resultType="int">
+    select count(1) from sys_acl
+    where acl_module_id = #{aclModuleId}
+  </select>
+  <select id="getPageByAclModuleId" resultMap="BaseResultMap" parameterType="com.rbac.param.ListAclParam">
+    select
+    <include refid="Base_Column_List"/>
+    from sys_acl
+    where acl_module_id = #{param.aclModuleId}
+    order by seq asc,name asc
+    limit #{param.rowStart},#{param.pageSize}
+  </select>
+  <select id="countByNameAndAclModuleId" resultType="int">
+    select count(1) from sys_acl
+    where acl_module_id = #{aclModuleId}
+    and name = #{aclName}
+    <if test="aclId!=null">
+      and id != #{aclId}
+    </if>
+  </select>
 </mapper>

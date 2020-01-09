@@ -15,7 +15,8 @@ public class SysDept {
     private Integer id;
 
     private String name;
-
+//    @Builder注解会把对象的默认值清掉，=0无效，空指针异常
+//保留默认值需要@lombok.Builder.Default
     private Integer parentId = 0;
 
     private String level;

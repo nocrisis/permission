@@ -1,7 +1,15 @@
 package com.rbac.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
 import java.util.Date;
 
+@Builder//重写了allArg构造器后，忘了补写一个默认的构造器了
+//mybatis收集result在调用反射的类后会默认调用默认的构造器。
+@AllArgsConstructor
+@NoArgsConstructor
 public class SysAcl {
     private Integer id;
 

@@ -52,8 +52,8 @@ public class SysDeptService {
         SysDept after = SysDept.builder().id(param.getId()).name(param.getName()).parentId(param.getParentId())
                 .seq(param.getSeq()).memo(param.getMemo()).build();
         after.setLevel(LevelHandler.calculateLevel(getLevel(param.getParentId()), param.getParentId()));
-        after.setOperator("system-update");
-        after.setOperatorIp("127.0.0.1");
+        after.setOperator(RequestHolder.getCurrentUsername());
+        after.setOperatorIp(IPUtil.getIpAddr(RequestHolder.getCurrentRequest()));
         after.setOperatorTime(new Date());
         updateWithChild(before, after);
     }
