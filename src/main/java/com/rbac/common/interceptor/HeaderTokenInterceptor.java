@@ -23,6 +23,7 @@ public class HeaderTokenInterceptor implements HandlerInterceptor {
                 if (verify) {
                     RequestHolder.add(JWTUtil.getUsername(headerToken));
                     RequestHolder.add(httpServletRequest);
+                    RequestHolder.add(JWTUtil.getUserId(headerToken));
                     return true;
                 }
                 httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

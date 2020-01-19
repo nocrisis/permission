@@ -64,4 +64,10 @@ public class BeanValidator {
             throw new ParamException(map.toString());
         }
     }
+    public static void check(Object param,Class clazz) throws ParamException {
+        Map<String, String> map = BeanValidator.validate(param,clazz);
+        if (MapUtils.isNotEmpty(map)) {
+            throw new ParamException(map.toString());
+        }
+    }
 }

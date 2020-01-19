@@ -2,6 +2,7 @@ package com.rbac.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
@@ -10,6 +11,7 @@ import java.util.Date;
 //mybatis收集result在调用反射的类后会默认调用默认的构造器。
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(of = {"id"})
 public class SysAcl {
     private Integer id;
 

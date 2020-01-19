@@ -191,6 +191,21 @@
     order by seq asc,name asc
     limit #{param.rowStart},#{param.pageSize}
   </select>
+  <select id="getAll" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List"/>
+    from sys_acl
+    where acl_module_id = #{param.aclModuleId}
+  </select>
+  <select id="getByIdList" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from sys_acl
+    where id in
+    <foreach collection="ids" item="id" open="(" close=")" separator=",">
+      #{id}
+    </foreach>
+  </select>
   <select id="countByNameAndAclModuleId" resultType="int">
     select count(1) from sys_acl
     where acl_module_id = #{aclModuleId}
