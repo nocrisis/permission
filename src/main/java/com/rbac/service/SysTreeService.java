@@ -36,7 +36,7 @@ public class SysTreeService {
 
     public List<AclModuleLevelDTO> roleTree(int roleId) {
         //1.当前用户已分配的权限点
-        List<SysAcl> userAclList = sysCoreService.getCurrentUserAclList();
+        List<SysAcl> userAclList = sysCoreService.getCurrentUserAclList(roleId);
         //2.当前角色分配的权限点
         List<SysAcl> roleAclList = sysCoreService.getRoleAclList(roleId);
         //3.当前系统所有的权限点
@@ -67,24 +67,26 @@ public class SysTreeService {
         Multimap<Integer, AclDTO> moduleIdAclMap = ArrayListMultimap.create();
         for (AclDTO acl : aclDTOList) {
             if (acl.getStatus() == 1) {
+                //同一个权限模块下的权限在一起
                 moduleIdAclMap.put(acl.getAclModuleId(), acl);
             }
         }
         bindAclsWithOrder(aclModuleLevelList, moduleIdAclMap);
         return aclModuleLevelList;
     }
+
     //把权限点绑定到指定的权限模块上
     private void bindAclsWithOrder(List<AclModuleLevelDTO> aclModuleLevelList, Multimap<Integer, AclDTO> moduleIdAclMap) {
         if (CollectionUtils.isEmpty(aclModuleLevelList)) {
             return;
         }
-        for (AclModuleLevelDTO dto : aclModuleLevelList) {
-            List<AclDTO> aclDTOList = (List<AclDTO>) moduleIdAclMap.get(dto.getId());
+        for (AclModuleLevelDTO aclModuleLevelDTO : aclModuleLevelList) {
+            List<AclDTO> aclDTOList = (List<AclDTO>) moduleIdAclMap.get(aclModuleLevelDTO.getId());
             if (CollectionUtils.isNotEmpty(aclDTOList)) {
-                Collections.sort(aclDTOList,aclSeqComparator);
-                dto.setAclDTOList(aclDTOList);
+                Collections.sort(aclDTOList, aclSeqComparator);
+                aclModuleLevelDTO.setAclDTOList(aclDTOList);
             }
-            bindAclsWithOrder(dto.getAclModuleList(),moduleIdAclMap);
+            bindAclsWithOrder(aclModuleLevelDTO.getAclModuleList(), moduleIdAclMap);
         }
     }
 
@@ -114,7 +116,7 @@ public class SysTreeService {
         }
         //按照seq从小到大排序
         Collections.sort(rootList, deptSeqComparator);
-        //递归生成树
+        //递归生成树，从root层级开始往下
         transformDeptTree(deptLevelList, LevelHandler.ROOT, levelMultimap);
         return rootList;
     }
@@ -131,7 +133,7 @@ public class SysTreeService {
             //处理下一层
             List<DeptLevelDTO> tempDeptList = (List<DeptLevelDTO>) deptLevelMultimap.get(nextLevel);
             if (CollectionUtils.isNotEmpty(tempDeptList)) {
-                //排序
+                //排序下一层级
                 Collections.sort(tempDeptList, deptSeqComparator);
                 /********************计算核心**********************/
                 //设置下一层部门

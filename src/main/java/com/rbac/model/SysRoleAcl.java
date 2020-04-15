@@ -1,5 +1,6 @@
 package com.rbac.model;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -14,10 +15,10 @@ public class SysRoleAcl {
 
     private Integer roleId;
 
-    private Integer alcId;
+    private Integer aclId;
 
     private String operator;
-
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date operatorTime;
 
     private String operatorIp;
@@ -38,12 +39,12 @@ public class SysRoleAcl {
         this.roleId = roleId;
     }
 
-    public Integer getAlcId() {
-        return alcId;
+    public Integer getAclId() {
+        return aclId;
     }
 
-    public void setAlcId(Integer alcId) {
-        this.alcId = alcId;
+    public void setAclId(Integer aclId) {
+        this.aclId = aclId;
     }
 
     public String getOperator() {

@@ -25,12 +25,13 @@ public class SysRoleAclService {
         if (originAclIdList.size() == aclIdList.size()) {
             Set<Integer> originAclIdSet = Sets.newHashSet(originAclIdList);
             Set<Integer> aclIdSet = Sets.newHashSet(aclIdList);
-            originAclIdSet.removeAll(aclIdList);
+            originAclIdSet.removeAll(aclIdSet);
             if (CollectionUtils.isEmpty(originAclIdSet)) {
                 return;
             }
         }
-
+        updateRoleAcls(roleId, aclIdList);
+//todo log change
     }
 
     @Transactional
@@ -41,11 +42,12 @@ public class SysRoleAclService {
         }
         List<SysRoleAcl> roleAclList = Lists.newArrayList();
         for (Integer aclId : aclIdList) {
-            SysRoleAcl roleAcl = SysRoleAcl.builder().roleId(roleId).alcId(aclId)
+            SysRoleAcl roleAcl = SysRoleAcl.builder().roleId(roleId).aclId(aclId)
                     .operator(RequestHolder.getCurrentUsername())
                     .operatorIp(IPUtil.getIpAddr(RequestHolder.getCurrentRequest()))
                     .operatorTime(new Date()).build();
             roleAclList.add(roleAcl);
         }
+        sysRoleAclMapper.batchInsert(roleAclList);
     }
 }

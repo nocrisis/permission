@@ -1,5 +1,7 @@
 package com.rbac.model;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 import java.util.Date;
 
 public class SysLog {
@@ -11,6 +13,7 @@ public class SysLog {
 
     private String operator;
 
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date operatorTime;
 
     private String operatorIp;

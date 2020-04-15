@@ -61,6 +61,7 @@ public class SysAclService {
         return sysAclMapper.countByNameAndAclModuleId(aclModuleId, aclName, aclId) > 0;
     }
 
+    //为每一个权限点生成唯一的code一边做tree的key
     public String generateCode() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
         return dateFormat.format(new Date()) + "_" + new Random().nextInt(100);

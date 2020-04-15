@@ -1,5 +1,6 @@
 package com.rbac.model;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -21,7 +22,7 @@ public class SysRole {
     private String memo;
 
     private String operator;
-
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date operatorTime;
 
     private String operatorIp;

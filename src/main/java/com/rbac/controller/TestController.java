@@ -6,19 +6,26 @@ import com.rbac.common.bean.JsonData;
 import com.rbac.common.exception.ParamException;
 import com.rbac.common.exception.PermissionException;
 import com.rbac.dao.SysAclModuleMapper;
+import com.rbac.dto.AclModuleLevelDTO;
 import com.rbac.model.SysAclModule;
 import com.rbac.param.ValidateTestVO;
+import com.rbac.service.SysTreeService;
 import com.rbac.util.BeanValidator;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/test")
 @Slf4j
-public class TestController
-{
+public class TestController {
+    @Autowired
+    private SysTreeService sysTreeService;
+
     @RequestMapping("/hello.json")
     @ResponseBody
     public JsonData hello() {
@@ -45,6 +52,7 @@ public class TestController
         BeanValidator.check(testVO);
         return JsonData.success("test Validate");
     }
+
     @RequestMapping("/appcontext.json")
     @ResponseBody
     public JsonData popByApp() throws ParamException {
@@ -54,4 +62,31 @@ public class TestController
         log.info(JSON.toJSONString(module));
         return JsonData.success("test ApplicationContextHelper");
     }
+
+    @RequestMapping("/testDfs")
+    public String testDfs() {
+        List<AclModuleLevelDTO> aclModuleList = sysTreeService.moduleTree();
+        String name = bfs(13, aclModuleList);
+        return name;
+    }
+
+    private String bfs(int moduleId, List<AclModuleLevelDTO> tree) {
+        String name = null;
+        if (tree != null) {
+            for (AclModuleLevelDTO module : tree) {
+                log.info("id:{}",module.getId());
+                if (module.getId() == moduleId) {
+                    name = module.getName();
+                    return name;
+                }
+                if (module.getAclModuleList() != null) {
+                    name = bfs(moduleId, module.getAclModuleList());
+                }
+            }
+        } else {
+            return name;
+        }
+        return name;
+    }
+
 }

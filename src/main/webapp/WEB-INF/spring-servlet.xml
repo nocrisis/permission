@@ -43,6 +43,7 @@ RequiredAnnotationBeanPostProcessor：@Required
             <!-- /login 不需要拦截-->
             <mvc:exclude-mapping path="/sys/user/register" />
             <mvc:exclude-mapping path="/sys/user/login" />
+            <mvc:exclude-mapping path="/test/testDfs" />
             <bean class="com.rbac.common.interceptor.HeaderTokenInterceptor"></bean>
         </mvc:interceptor>
     </mvc:interceptors>

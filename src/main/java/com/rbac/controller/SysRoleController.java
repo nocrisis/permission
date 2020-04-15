@@ -3,6 +3,7 @@ package com.rbac.controller;
 import com.rbac.common.bean.JsonData;
 import com.rbac.model.SysRole;
 import com.rbac.param.RoleParam;
+import com.rbac.param.Update;
 import com.rbac.service.SysRoleAclService;
 import com.rbac.service.SysRoleService;
 import com.rbac.service.SysTreeService;
@@ -10,12 +11,14 @@ import com.rbac.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Slf4j
-@Controller("/sys/role")
+@Controller
+@RequestMapping("/sys/role")
 public class SysRoleController {
 
     @Autowired
@@ -25,7 +28,7 @@ public class SysRoleController {
     @Autowired
     private SysRoleAclService sysRoleAclService;
 
-    @RequestMapping("/save")
+    @RequestMapping("/add")
     @ResponseBody
     public JsonData saveRole(@RequestBody RoleParam param) {
         sysRoleService.save(param);
@@ -41,7 +44,7 @@ public class SysRoleController {
 
     @RequestMapping("/update")
     @ResponseBody
-    public JsonData updateRole(@RequestBody RoleParam param) {
+    public JsonData updateRole(@Validated({Update.class}) @RequestBody RoleParam param) {
         sysRoleService.update(param);
         return JsonData.success();
     }
@@ -55,7 +58,7 @@ public class SysRoleController {
     }
 
     @RequestMapping("/roleTree")
-    @ResponseBody
+    @ResponseBody//角色对应的权限树（有默认已勾选的），顶级roleId为0
     public JsonData roleData(@RequestParam("roleId") int roleId) {
         return JsonData.success(sysTreeService.roleTree(roleId));
     }

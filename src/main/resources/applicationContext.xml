@@ -19,7 +19,24 @@
         <property name="minIdle" value="3"/>
         <property name="maxActive" value="20"/>
         <property name="maxWait" value="60000"/>
-        <property name="filters" value="stat,wall"/>
+        <property name="filters" value="${filters}"/>
+        <!-- 若需要mybatis的批量sql需配置     不配置则报错:nested exception is java.sql.SQLException: sql injection violation, multi-statement not allow-->
+        <property name="proxyFilters">
+            <list>
+                <ref bean="wall-filter"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="wall-filter" class="com.alibaba.druid.wall.WallFilter">
+        <property name="dbType" value="mysql"/>
+        <property name="config" ref="wall-config"/>
+    </bean>
+
+    <!--解决mybatis与druid集成后，wallFilter sql注入异常-->
+    <bean id="wall-config" class="com.alibaba.druid.wall.WallConfig">
+        <property name="multiStatementAllow" value="true"/>
+        <property name="noneBaseStatementAllow" value="true"/>
     </bean>
     <!--sql是放在哪里的-->
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
@@ -44,7 +61,7 @@
         <property name="logSlowSql" value="true"/><!--超过3s慢sql用log记录下来-->
         <property name="mergeSql" value="true"/><!--多行sql merge-->
     </bean>
-    <bean id="wall-filter" class="com.alibaba.druid.wall.WallFilter">
+   <!-- <bean id="wall-filter" class="com.alibaba.druid.wall.WallFilter">
         <property name="dbType" value="mysql"/>
-    </bean>
+    </bean>-->
 </beans>

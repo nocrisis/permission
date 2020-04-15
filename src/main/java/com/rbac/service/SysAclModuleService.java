@@ -95,10 +95,10 @@ public class SysAclModuleService {
         SysAclModule aclModule = aclModuleMapper.selectByPrimaryKey(id);
         String childLevel = LevelHandler.calculateLevel(aclModule.getLevel(), id);
         List<SysAclModule> childs = aclModuleMapper.getChildModuleListByLevel(childLevel);
-        List<Integer> ids=childs.stream().collect(Collectors.mapping(SysAclModule::getId, Collectors.toList()));
+        List<Integer> ids = childs.stream().collect(Collectors.mapping(SysAclModule::getId, Collectors.toList()));
         if (CollectionUtils.isNotEmpty(childs)) {
             aclModuleMapper.batchDelete(ids);
         }
-        aclModuleMapper.deleteByPrimaryKey(id) ;
+        aclModuleMapper.deleteByPrimaryKey(id);
     }
 }
